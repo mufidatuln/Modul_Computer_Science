@@ -1,0 +1,895 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    font-family: 'Space Grotesk', sans-serif;
+    background: #111111;
+    color: #1a1a1a;
+  }
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 2.5rem 0;
+  }
+  .pdf-page {
+    width: 860px;
+    max-width: 860px;
+    min-width: 860px;
+    background: #f4f1eb;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    flex-shrink: 0;
+  }
+
+  .hero {
+    background: #1a1a1a;
+    color: #f4f1eb;
+    padding: 3rem 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: 'CT';
+    font-family: 'Syne', sans-serif;
+    font-size: 14rem;
+    font-weight: 800;
+    position: absolute;
+    right: -1rem;
+    top: -2rem;
+    opacity: 0.07;
+    line-height: 1;
+    color: #f4f1eb;
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    background: #e8d44d;
+    color: #1a1a1a;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    max-width: 500px;
+  }
+  .hero p {
+    color: #a8a49e;
+    font-size: 14px;
+    max-width: 420px;
+    line-height: 1.6;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #2e2e2e;
+    flex-wrap: wrap;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #666; }
+  .meta-value { font-size: 14px; font-weight: 500; color: #f4f1eb; }
+
+  .progress-bar {
+    background: #2e2e2e;
+    height: 4px;
+    border-radius: 0;
+  }
+  .progress-fill {
+    background: #e8d44d;
+    height: 4px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .nav-tabs {
+    display: flex;
+    background: #1a1a1a;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex-shrink: 0;
+    padding: 0.75rem 1.25rem;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-tab:hover { color: #f4f1eb; }
+  .nav-tab.active { color: #e8d44d; border-bottom-color: #e8d44d; }
+
+  .section { display: none; padding: 2rem 2.5rem; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+  }
+  .section-intro {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 560px;
+  }
+
+  .analogy-box {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .analogy-box::after {
+    content: attr(data-icon);
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    font-size: 3.5rem;
+    opacity: 0.15;
+  }
+  .analogy-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e8d44d;
+    margin-bottom: 0.5rem;
+  }
+  .analogy-box p {
+    color: #b5b0aa;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .pillar-card {
+    background: #fff;
+    border: 1px solid #e5e0d8;
+    border-radius: 8px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pillar-card:hover { border-color: #1a1a1a; transform: translateY(-2px); }
+  .pillar-card.active { border-color: #e8d44d; background: #fefce8; }
+  .pillar-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e5e0d8;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  .pillar-card.active .pillar-num { color: #e8d44d; }
+  .pillar-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #1a1a1a;
+  }
+  .pillar-card p { font-size: 12px; color: #777; line-height: 1.5; }
+
+  .pillar-detail {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    display: none;
+  }
+  .pillar-detail.visible { display: block; }
+  .pillar-detail h4 {
+    font-family: 'Syne', sans-serif;
+    color: #e8d44d;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .pillar-detail p { color: #b5b0aa; font-size: 13px; line-height: 1.7; margin-bottom: 0.75rem; }
+  .example-tag {
+    display: inline-block;
+    background: #2e2e2e;
+    color: #e8d44d;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin: 3px;
+    font-weight: 500;
+  }
+
+  .quiz-card {
+    background: #fff;
+    border: 1px solid #e5e0d8;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .quiz-q {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+    line-height: 1.5;
+  }
+  .quiz-scenario {
+    background: #f4f1eb;
+    border-left: 3px solid #e8d44d;
+    padding: 0.75rem 1rem;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    border-radius: 0 4px 4px 0;
+    font-style: italic;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .quiz-option {
+    background: #f4f1eb;
+    border: 1.5px solid #e5e0d8;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-family: 'Space Grotesk', sans-serif;
+    color: #1a1a1a;
+    line-height: 1.4;
+  }
+  .quiz-option:hover { border-color: #1a1a1a; background: #ede9e0; }
+  .quiz-option.correct { background: #eaf6f0; border-color: #2d9e6b; color: #1a5c3f; }
+  .quiz-option.wrong { background: #fdecea; border-color: #e04040; color: #7a1b1b; }
+  .quiz-option:disabled { cursor: not-allowed; }
+  .quiz-feedback {
+    margin-top: 0.75rem;
+    font-size: 12px;
+    line-height: 1.5;
+    display: none;
+    padding: 0.75rem;
+    border-radius: 6px;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: #eaf6f0; color: #1a5c3f; border: 1px solid #2d9e6b; }
+  .quiz-feedback.bad { background: #fdecea; color: #7a1b1b; border: 1px solid #e04040; }
+
+  .practice-section {
+    background: #fff;
+    border: 1px solid #e5e0d8;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .practice-header {
+    background: #1a1a1a;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .practice-step-badge {
+    background: #e8d44d;
+    color: #1a1a1a;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .practice-header h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f4f1eb;
+  }
+  .practice-body { padding: 1.25rem; }
+  .practice-body p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .practice-body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .practice-body ul li {
+    font-size: 13px;
+    color: #555;
+    display: flex;
+    gap: 0.5rem;
+    line-height: 1.5;
+  }
+  .practice-body ul li::before {
+    content: '→';
+    color: #e8d44d;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .input-field {
+    width: 100%;
+    border: 1.5px solid #e5e0d8;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 13px;
+    font-family: 'Space Grotesk', sans-serif;
+    background: #f4f1eb;
+    resize: vertical;
+    min-height: 80px;
+    color: #1a1a1a;
+    transition: border-color 0.2s;
+  }
+  .input-field:focus { outline: none; border-color: #1a1a1a; background: #fff; }
+  .input-field::placeholder { color: #aaa; }
+  .btn {
+    background: #1a1a1a;
+    color: #e8d44d;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1.25rem;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+    margin-top: 0.75rem;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-outline {
+    background: transparent;
+    color: #1a1a1a;
+    border: 1.5px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 0.6rem 1.25rem;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .btn-outline:hover { background: #1a1a1a; color: #e8d44d; }
+
+  .score-display {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+    display: none;
+  }
+  .score-display.visible { display: block; }
+  .score-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: #e8d44d;
+    line-height: 1;
+  }
+  .score-label { color: #666; font-size: 13px; margin-top: 0.5rem; }
+  .score-msg { color: #b5b0aa; font-size: 14px; margin-top: 0.75rem; line-height: 1.5; }
+
+  .ct-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+    background: #fff;
+    border: 1px solid #e5e0d8;
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow: hidden;
+  }
+  .flow-node {
+    background: #1a1a1a;
+    color: #f4f1eb;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+    max-width: 130px;
+  }
+  .flow-node .icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  .flow-node .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #e8d44d; }
+  .flow-node .sub { font-size: 10px; color: #888; margin-top: 2px; }
+  .flow-arrow { color: #ccc; font-size: 1.5rem; padding: 0 0.25rem; flex-shrink: 0; }
+
+  .highlight-text {
+    background: linear-gradient(to right, #e8d44d 0%, #e8d44d 100%);
+    background-size: 100% 3px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    font-weight: 600;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #f0ece3;
+    color: #555;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin: 2px;
+    font-weight: 500;
+    border: 1px solid #e5e0d8;
+  }
+
+  .divider { height: 1px; background: #e5e0d8; margin: 1.5rem 0; }
+
+  .nav-bottom {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e0d8;
+    justify-content: flex-end;
+  }
+</style>
+</head>
+<body>
+<div class="pdf-page">
+
+<div class="hero">
+  <div class="badge">Pertemuan 1 · Computer Science</div>
+  <h1>Computational Thinking</h1>
+  <p>Belajar berpikir seperti komputer — supaya kamu bisa <span class="highlight-text">memecahkan masalah apa pun</span> dengan lebih efisien.</p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-label">Durasi</span>
+      <span class="meta-value">90 Menit</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Level</span>
+      <span class="meta-value">SMA · Usia 16</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Mode</span>
+      <span class="meta-value">Teori + Praktik</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Progres</span>
+      <span class="meta-value" id="progress-text">0%</span>
+    </div>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progress-fill"></div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSection('intro', this, 1)">🚀 Intro</button>
+  <button class="nav-tab" onclick="showSection('materi', this, 2)">📚 Materi</button>
+  <button class="nav-tab" onclick="showSection('pilar', this, 3)">🏛️ 4 Pilar</button>
+  <button class="nav-tab" onclick="showSection('kuis', this, 4)">🧠 Kuis</button>
+  <button class="nav-tab" onclick="showSection('praktik', this, 5)">🛠️ Praktik</button>
+</div>
+
+<!-- INTRO -->
+<div class="section active" id="section-intro">
+  <div class="section-title">Hei, selamat datang! 👋</div>
+  <p class="section-intro">Sebelum mulai, kita perlu nanya dulu — <strong>apa itu berpikir seperti komputer?</strong> Spoiler: kamu sudah melakukannya setiap hari, tanpa sadar.</p>
+
+  <div class="analogy-box" data-icon="🍳">
+    <h3>Analogi: Bikin Mie Instan</h3>
+    <p>Kamu mau bikin mie instan. Langkah-langkahnya? Rebus air → masukkan mie → tambah bumbu → sajikan. Kamu baru saja membuat <strong style="color:#e8d44d;">algoritma</strong>. Itulah salah satu inti dari Computational Thinking!</p>
+  </div>
+
+  <div class="analogy-box" data-icon="🎮">
+    <h3>Analogi: Kalah di Game</h3>
+    <p>Kamu mati di level yang sama 5 kali. Apa yang kamu lakukan? Kamu analisis polanya — musuh muncul dari mana, kapan serangan datang — lalu cari solusi. Itu juga Computational Thinking: <strong style="color:#e8d44d;">pattern recognition + problem solving</strong>.</p>
+  </div>
+
+  <div class="analogy-box" data-icon="📱">
+    <h3>Analogi: Ngerekomendasiin Playlist</h3>
+    <p>Temenmu minta rekomendasi lagu. Kamu tanya "suka genre apa?" sebelum jawab. Kamu baru saja <strong style="color:#e8d44d;">menyederhanakan masalah</strong> — buang info yang gak relevan, fokus pada yang penting. Itu juga CT!</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="font-size:1rem;">📌 Tujuan Hari Ini</div>
+  <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem; margin-top:0.75rem;">
+    <li style="display:flex; gap:0.75rem; align-items:flex-start; font-size:13px; color:#555; line-height:1.5;"><span style="background:#e8d44d; color:#1a1a1a; font-size:11px; font-weight:700; padding:2px 8px; border-radius:2px; flex-shrink:0; margin-top:1px;">01</span> Memahami apa itu Computational Thinking dan mengapa ini penting</li>
+    <li style="display:flex; gap:0.75rem; align-items:flex-start; font-size:13px; color:#555; line-height:1.5;"><span style="background:#e8d44d; color:#1a1a1a; font-size:11px; font-weight:700; padding:2px 8px; border-radius:2px; flex-shrink:0; margin-top:1px;">02</span> Mengenal 4 pilar CT: Decomposition, Pattern Recognition, Abstraction, Algorithms</li>
+    <li style="display:flex; gap:0.75rem; align-items:flex-start; font-size:13px; color:#555; line-height:1.5;"><span style="background:#e8d44d; color:#1a1a1a; font-size:11px; font-weight:700; padding:2px 8px; border-radius:2px; flex-shrink:0; margin-top:1px;">03</span> Mengaplikasikan CT untuk memecahkan masalah nyata di sesi praktik</li>
+  </ul>
+
+  <div class="nav-bottom">
+    <button class="btn" onclick="showSection('materi', document.querySelectorAll('.nav-tab')[1], 2)">Mulai Belajar →</button>
+  </div>
+</div>
+
+<!-- MATERI -->
+<div class="section" id="section-materi">
+  <div class="section-title">Apa itu Computational Thinking?</div>
+  <p class="section-intro">CT bukan tentang ngoding. CT adalah <strong>cara berpikir</strong> untuk memecahkan masalah kompleks dengan langkah-langkah yang logis, terstruktur, dan efisien — cara yang bisa dimengerti oleh manusia maupun komputer.</p>
+
+  <div class="ct-flow">
+    <div class="flow-node">
+      <div class="icon">🔍</div>
+      <div class="label">Masalah</div>
+      <div class="sub">Identifikasi</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-node">
+      <div class="icon">🧩</div>
+      <div class="label">Pecah</div>
+      <div class="sub">Dekomposisi</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-node">
+      <div class="icon">💡</div>
+      <div class="label">Solusi</div>
+      <div class="sub">Algoritma</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-node">
+      <div class="icon">✅</div>
+      <div class="label">Hasil</div>
+      <div class="sub">Evaluasi</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1rem; margin-bottom:0.75rem;">🌍 Kenapa CT Penting?</div>
+  <p class="section-intro" style="margin-bottom:1rem;">CT dipakai di berbagai bidang — bukan cuma IT:</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+    <div style="background:#fff; border:1px solid #e5e0d8; border-radius:8px; padding:1rem;">
+      <div style="font-size:1.5rem; margin-bottom:0.5rem;">🏥</div>
+      <div style="font-size:13px; font-weight:700; margin-bottom:0.25rem;">Kedokteran</div>
+      <div style="font-size:12px; color:#777; line-height:1.5;">Dokter mendiagnosis penyakit: pisahkan gejala, cari pola, buat keputusan berdasarkan data.</div>
+    </div>
+    <div style="background:#fff; border:1px solid #e5e0d8; border-radius:8px; padding:1rem;">
+      <div style="font-size:1.5rem; margin-bottom:0.5rem;">🎨</div>
+      <div style="font-size:13px; font-weight:700; margin-bottom:0.25rem;">Desain</div>
+      <div style="font-size:12px; color:#777; line-height:1.5;">Desainer urai kebutuhan user, temukan pola estetika, buat prototipe sistematis.</div>
+    </div>
+    <div style="background:#fff; border:1px solid #e5e0d8; border-radius:8px; padding:1rem;">
+      <div style="font-size:1.5rem; margin-bottom:0.5rem;">📈</div>
+      <div style="font-size:13px; font-weight:700; margin-bottom:0.25rem;">Bisnis</div>
+      <div style="font-size:12px; color:#777; line-height:1.5;">Analis pasar memecah tren kompleks jadi insight yang actionable.</div>
+    </div>
+    <div style="background:#fff; border:1px solid #e5e0d8; border-radius:8px; padding:1rem;">
+      <div style="font-size:1.5rem; margin-bottom:0.5rem;">⚽</div>
+      <div style="font-size:13px; font-weight:700; margin-bottom:0.25rem;">Olahraga</div>
+      <div style="font-size:12px; color:#777; line-height:1.5;">Pelatih analisis pola permainan lawan, buat strategi berdasarkan data.</div>
+    </div>
+  </div>
+
+  <div class="nav-bottom">
+    <button class="btn-outline" onclick="showSection('intro', document.querySelectorAll('.nav-tab')[0], 1)">← Kembali</button>
+    <button class="btn" onclick="showSection('pilar', document.querySelectorAll('.nav-tab')[2], 3)">4 Pilar CT →</button>
+  </div>
+</div>
+
+<!-- PILAR -->
+<div class="section" id="section-pilar">
+  <div class="section-title">4 Pilar Computational Thinking</div>
+  <p class="section-intro">Klik setiap pilar untuk melihat penjelasan lengkap + contoh nyata. Semua pilar ini bekerja bersama!</p>
+
+  <div class="pillars-grid">
+    <div class="pillar-card active" id="pilar-0" onclick="selectPilar(0)">
+      <div class="pillar-num">01</div>
+      <h3>🔨 Decomposition</h3>
+      <p>Memecah masalah besar jadi bagian-bagian kecil yang lebih mudah diselesaikan.</p>
+    </div>
+    <div class="pillar-card" id="pilar-1" onclick="selectPilar(1)">
+      <div class="pillar-num">02</div>
+      <h3>🔎 Pattern Recognition</h3>
+      <p>Menemukan pola, kesamaan, atau tren dari kumpulan data atau masalah.</p>
+    </div>
+    <div class="pillar-card" id="pilar-2" onclick="selectPilar(2)">
+      <div class="pillar-num">03</div>
+      <h3>🎭 Abstraction</h3>
+      <p>Fokus pada informasi penting, buang detail yang tidak relevan.</p>
+    </div>
+    <div class="pillar-card" id="pilar-3" onclick="selectPilar(3)">
+      <div class="pillar-num">04</div>
+      <h3>📋 Algorithms</h3>
+      <p>Membuat langkah-langkah instruksi yang urut dan jelas untuk menyelesaikan masalah.</p>
+    </div>
+  </div>
+
+  <div class="pillar-detail visible" id="detail-0">
+    <h4>🔨 Decomposition — Pecah Masalah!</h4>
+    <p>Bayangkan kamu diminta <strong style="color:#e8d44d;">bikin aplikasi ojek online</strong>. Kedengarannya mustahil, kan? Tapi kalau dipecah: Login → Pesan ojek → Lacak driver → Bayar → Rating. Tiba-tiba jadi masalah-masalah kecil yang bisa dikerjakan satu per satu.</p>
+    <p><strong style="color:#e8d44d;">Analogi:</strong> Makan gajah. Kamu gak bisa makan gajah utuh — tapi kalau dipotong kecil-kecil, bisa! Itulah decomposition.</p>
+    <div><span class="example-tag">Contoh: Bikin website</span><span class="example-tag">Contoh: Nulis esai</span><span class="example-tag">Contoh: Ngerjain proyek kelompok</span></div>
+  </div>
+  <div class="pillar-detail" id="detail-1">
+    <h4>🔎 Pattern Recognition — Cari Polanya!</h4>
+    <p>Kamu lagi belajar buat soal matematika. Soal nomor 1, 2, dan 5 punya struktur yang mirip. Kalau kamu bisa kenali polanya, kamu bisa selesaikan semua soal serupa dengan cara yang sama — hemat waktu dan energi!</p>
+    <p><strong style="color:#e8d44d;">Analogi:</strong> Spotify tahu kamu suka lagu apa? Karena mereka mengenali pola dari lagu-lagu yang kamu dengarkan. Machine learning = pattern recognition yang canggih banget.</p>
+    <div><span class="example-tag">Contoh: Spam filter email</span><span class="example-tag">Contoh: Prediksi cuaca</span><span class="example-tag">Contoh: Rekomendasi Netflix</span></div>
+  </div>
+  <div class="pillar-detail" id="detail-2">
+    <h4>🎭 Abstraction — Fokus yang Penting!</h4>
+    <p>Kamu mau bikin peta jalan dari rumah ke sekolah. Apakah kamu perlu gambar setiap pohon dan tiang listrik? Tidak! Kamu cukup gambar jalan, perempatan, dan landmark penting. Itulah abstraksi — <strong style="color:#e8d44d;">sederhanakan realita</strong> jadi versi yang cukup untuk menyelesaikan masalah.</p>
+    <p><strong style="color:#e8d44d;">Analogi:</strong> Peta MRT. Peta MRT tidak menunjukkan bangunan aslinya, tapi cukup berguna untuk navigasi. Detail yang tidak perlu dibuang!</p>
+    <div><span class="example-tag">Contoh: Peta Google Maps</span><span class="example-tag">Contoh: Class dalam OOP</span><span class="example-tag">Contoh: Deskripsi produk</span></div>
+  </div>
+  <div class="pillar-detail" id="detail-3">
+    <h4>📋 Algorithms — Bikin Panduan Langkah demi Langkah!</h4>
+    <p>Algoritma adalah <strong style="color:#e8d44d;">resep</strong> untuk menyelesaikan masalah. Harus urut, spesifik, dan menghasilkan hasil yang sama setiap kali dijalankan. Bukan cuma untuk kode — algoritma ada di mana-mana!</p>
+    <p><strong style="color:#e8d44d;">Contoh Algoritma:</strong> Cara login Instagram: 1) Buka app 2) Masukkan username 3) Masukkan password 4) Klik login 5) Jika salah → ulangi, jika benar → masuk beranda.</p>
+    <div><span class="example-tag">Contoh: Resep masakan</span><span class="example-tag">Contoh: Petunjuk IKEA</span><span class="example-tag">Contoh: Prosedur darurat</span></div>
+  </div>
+
+  <div class="nav-bottom">
+    <button class="btn-outline" onclick="showSection('materi', document.querySelectorAll('.nav-tab')[1], 2)">← Kembali</button>
+    <button class="btn" onclick="showSection('kuis', document.querySelectorAll('.nav-tab')[3], 4)">Uji Pemahaman →</button>
+  </div>
+</div>
+
+<!-- KUIS -->
+<div class="section" id="section-kuis">
+  <div class="section-title">🧠 Kuis Singkat</div>
+  <p class="section-intro">3 soal untuk cek pemahamanmu. Gak ada sistem hukuman — ini buat belajar, bukan ujian!</p>
+
+  <div class="quiz-card">
+    <div class="quiz-q">1. Andi diminta membuat aplikasi jadwal pelajaran. Langkah pertama yang dia lakukan adalah membagi aplikasi menjadi bagian-bagian: input pelajaran, tampilan kalender, dan pengingat. Apa yang Andi lakukan?</div>
+    <div class="quiz-options" id="q1">
+      <button class="quiz-option" onclick="checkAnswer(this, 'q1', false, 'Abstraction berfokus pada menyederhanakan detail — buang info yang tidak penting. Ini beda ya!')">a) Abstraction</button>
+      <button class="quiz-option" onclick="checkAnswer(this, 'q1', true, 'Tepat! Andi memecah masalah besar (aplikasi jadwal) menjadi komponen-komponen kecil. Itulah Decomposition!')">b) Decomposition ✓</button>
+      <button class="quiz-option" onclick="checkAnswer(this, 'q1', false, 'Pattern Recognition mencari pola atau kesamaan dari data yang ada. Bukan itu di sini.')">c) Pattern Recognition</button>
+    </div>
+    <div class="quiz-feedback" id="fb-q1"></div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">2. Perhatikan skenario ini:</div>
+    <div class="quiz-scenario">"Sistem filter spam di email kamu sudah belajar bahwa email dengan kata 'GRATIS', 'MENANG', dan 'KLIK SEKARANG' kemungkinan besar adalah spam. Sekarang setiap email baru langsung dicek berdasarkan pola itu."</div>
+    <div class="quiz-q">Pilar CT mana yang paling dominan digunakan?</div>
+    <div class="quiz-options" id="q2">
+      <button class="quiz-option" onclick="checkAnswer(this, 'q2', false, 'Algoritma memang terlibat, tapi inti dari skenario ini bukan soal langkah-langkah — melainkan pengenalan pola dari data historis.')">a) Algorithm</button>
+      <button class="quiz-option" onclick="checkAnswer(this, 'q2', false, 'Decomposition memecah masalah jadi bagian kecil. Di sini tidak ada pemecahan masalah seperti itu.')">b) Decomposition</button>
+      <button class="quiz-option" onclick="checkAnswer(this, 'q2', true, 'Betul banget! Sistem mempelajari pola dari data masa lalu (kata-kata spam) lalu menggunakannya untuk mengenali kasus baru. Classic Pattern Recognition!')">c) Pattern Recognition ✓</button>
+    </div>
+    <div class="quiz-feedback" id="fb-q2"></div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">3. Dalam game strategi, kamu membuat panduan: "1) Kumpulkan sumber daya 2) Bangun pertahanan 3) Latih pasukan 4) Serang musuh terlemah dulu". Pilar CT mana ini?</div>
+    <div class="quiz-options" id="q3">
+      <button class="quiz-option" onclick="checkAnswer(this, 'q3', true, 'Benar! Panduan langkah demi langkah yang urut dan spesifik untuk mencapai tujuan — itulah definisi Algoritma!')">a) Algorithm ✓</button>
+      <button class="quiz-option" onclick="checkAnswer(this, 'q3', false, 'Abstraction menyederhanakan dengan membuang detail tidak penting. Di sini kamu justru membuat detail langkah-langkahnya.')">b) Abstraction</button>
+      <button class="quiz-option" onclick="checkAnswer(this, 'q3', false, 'Pattern Recognition mencari pola dari data. Di sini kamu membuat instruksi, bukan menganalisis pola.')">c) Pattern Recognition</button>
+    </div>
+    <div class="quiz-feedback" id="fb-q3"></div>
+  </div>
+
+  <div class="score-display" id="score-display">
+    <div class="score-num" id="score-num">0/3</div>
+    <div class="score-label">Skor Kamu</div>
+    <div class="score-msg" id="score-msg"></div>
+    <button class="btn" style="margin-top:1rem;" onclick="showSection('praktik', document.querySelectorAll('.nav-tab')[4], 5)">Lanjut ke Praktik →</button>
+  </div>
+
+  <div class="nav-bottom">
+    <button class="btn-outline" onclick="showSection('pilar', document.querySelectorAll('.nav-tab')[2], 3)">← Kembali</button>
+  </div>
+</div>
+
+<!-- PRAKTIK -->
+<div class="section" id="section-praktik">
+  <div class="section-title">🛠️ Sesi Praktik</div>
+  <p class="section-intro">Saatnya terapkan CT untuk masalah nyata! Kerjakan setiap langkah berikut. <strong>Kasus:</strong> Kamu diminta desain sistem antrian di kantin sekolah yang selalu macet waktu istirahat.</p>
+
+  <div class="practice-section">
+    <div class="practice-header">
+      <span class="practice-step-badge">Langkah 1</span>
+      <h3>Decomposition — Pecah Masalahnya</h3>
+    </div>
+    <div class="practice-body">
+      <p>Masalah "antrian kantin yang macet" terlalu besar. Pecah jadi sub-masalah yang lebih kecil. Pikirkan: apa saja bagian dari sistem kantin yang berpotensi menyebabkan masalah?</p>
+      <ul>
+        <li>Contoh: proses pemesanan, proses pembayaran, waktu memasak...</li>
+        <li>Coba identifikasi minimal 4 sub-masalah!</li>
+      </ul>
+      <textarea class="input-field" id="step1-input" placeholder="Tulis sub-masalah yang kamu identifikasi di sini...
+
+Contoh: 
+1. Kasir terlalu sedikit → antrian bayar panjang
+2. ..."></textarea>
+      <button class="btn" onclick="saveStep(1)">Simpan Langkah 1</button>
+      <div id="step1-saved" style="display:none; margin-top:0.5rem; font-size:12px; color:#2d9e6b; font-weight:600;">✓ Tersimpan!</div>
+    </div>
+  </div>
+
+  <div class="practice-section">
+    <div class="practice-header">
+      <span class="practice-step-badge">Langkah 2</span>
+      <h3>Pattern Recognition — Cari Polanya</h3>
+    </div>
+    <div class="practice-body">
+      <p>Dari sub-masalah yang sudah kamu identifikasi, apakah ada pola yang bisa kamu temukan? Kapan antrian paling panjang? Apa yang terjadi berulang-ulang?</p>
+      <ul>
+        <li>Pikirkan: jam berapa antrian paling parah?</li>
+        <li>Apa yang membuat satu hari lebih parah dari hari lain?</li>
+        <li>Apakah ada kesamaan dengan antrian di tempat lain (minimarket, dll)?</li>
+      </ul>
+      <textarea class="input-field" id="step2-input" placeholder="Tulis pola yang kamu temukan...
+
+Contoh:
+- Antrian paling panjang di 5 menit pertama istirahat
+- Menu favorit selalu habis → orang antri lebih lama karena ganti pilihan
+- ..."></textarea>
+      <button class="btn" onclick="saveStep(2)">Simpan Langkah 2</button>
+      <div id="step2-saved" style="display:none; margin-top:0.5rem; font-size:12px; color:#2d9e6b; font-weight:600;">✓ Tersimpan!</div>
+    </div>
+  </div>
+
+  <div class="practice-section">
+    <div class="practice-header">
+      <span class="practice-step-badge">Langkah 3</span>
+      <h3>Abstraction — Saring Info Penting</h3>
+    </div>
+    <div class="practice-body">
+      <p>Dari semua info yang ada, apa yang benar-benar penting untuk menyelesaikan masalah antrian? Apa yang bisa diabaikan?</p>
+      <ul>
+        <li>Buang detail yang tidak relevan (misal: warna seragam petugas)</li>
+        <li>Fokus pada variabel yang benar-benar mempengaruhi kecepatan antrian</li>
+      </ul>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin:0.75rem 0;">
+        <div>
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#2d9e6b; margin-bottom:0.4rem;">✓ PENTING (simpan)</div>
+          <textarea class="input-field" id="step3a-input" placeholder="Misal: Jumlah kasir, kecepatan memasak..." style="min-height:60px;"></textarea>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#e04040; margin-bottom:0.4rem;">✗ TIDAK PENTING (buang)</div>
+          <textarea class="input-field" id="step3b-input" placeholder="Misal: Warna nampan makanan..." style="min-height:60px;"></textarea>
+        </div>
+      </div>
+      <button class="btn" onclick="saveStep(3)">Simpan Langkah 3</button>
+      <div id="step3-saved" style="display:none; margin-top:0.5rem; font-size:12px; color:#2d9e6b; font-weight:600;">✓ Tersimpan!</div>
+    </div>
+  </div>
+
+  <div class="practice-section">
+    <div class="practice-header">
+      <span class="practice-step-badge">Langkah 4</span>
+      <h3>Algorithm — Rancang Solusinya</h3>
+    </div>
+    <div class="practice-body">
+      <p>Berdasarkan analisis di atas, rancang <strong>langkah-langkah solusi</strong> yang bisa mengatasi kemacetan antrian kantin. Tulis sebagai instruksi yang jelas dan berurutan!</p>
+      <ul>
+        <li>Harus spesifik — "percepat pelayanan" terlalu umum</li>
+        <li>Harus urut — langkah 1 harus selesai sebelum langkah 2</li>
+        <li>Harus realistis dan bisa diimplementasikan di sekolah</li>
+      </ul>
+      <textarea class="input-field" id="step4-input" placeholder="Tulis algoritma solusimu...
+
+Langkah 1: ...
+Langkah 2: ...
+Langkah 3: ...
+..." style="min-height:120px;"></textarea>
+      <button class="btn" onclick="saveStep(4)">Simpan Langkah 4</button>
+      <div id="step4-saved" style="display:none; margin-top:0.5rem; font-size:12px; color:#2d9e6b; font-weight:600;">✓ Tersimpan!</div>
+    </div>
+  </div>
+
+  <div style="background:#1a1a1a; border-radius:8px; padding:1.5rem; margin-top:0.5rem;">
+    <div style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:#e8d44d; margin-bottom:0.5rem;">🎯 Selesai! Apa Selanjutnya?</div>
+    <p style="color:#b5b0aa; font-size:13px; line-height:1.7; margin-bottom:1rem;">Presentasikan solusimu kepada teman sekelas (3-4 menit). Jelaskan bagaimana kamu menerapkan 4 pilar CT!</p>
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+      <span class="tag">Kerja mandiri: 20 menit</span>
+      <span class="tag">Presentasi: 5 menit/orang</span>
+      <span class="tag">Diskusi: 10 menit</span>
+    </div>
+    <button class="btn" style="margin-top:1rem;" onclick="sendPrompt('Berikan contoh solusi Computational Thinking untuk masalah antrian kantin sekolah dengan menggunakan 4 pilar: Decomposition, Pattern Recognition, Abstraction, dan Algorithm')">Lihat Contoh Jawaban ↗</button>
+  </div>
+
+  <div class="nav-bottom">
+    <button class="btn-outline" onclick="showSection('kuis', document.querySelectorAll('.nav-tab')[3], 4)">← Kembali ke Kuis</button>
+  </div>
+</div>
+
+<script>
+let answers = {};
+let correctCount = 0;
+let totalAnswered = 0;
+
+function showSection(id, tab, stepNum) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  tab.classList.add('active');
+  const pct = Math.round((stepNum / 5) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = pct + '%';
+}
+
+function selectPilar(idx) {
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('pilar-' + i).classList.remove('active');
+    document.getElementById('detail-' + i).classList.remove('visible');
+  }
+  document.getElementById('pilar-' + idx).classList.add('active');
+  document.getElementById('detail-' + idx).classList.add('visible');
+}
+
+function checkAnswer(btn, qId, isCorrect, feedback) {
+  if (answers[qId] !== undefined) return;
+  answers[qId] = isCorrect;
+  
+  const opts = document.getElementById(qId).querySelectorAll('.quiz-option');
+  opts.forEach(o => { o.disabled = true; });
+  
+  if (isCorrect) {
+    btn.classList.add('correct');
+    correctCount++;
+  } else {
+    btn.classList.add('wrong');
+  }
+  
+  totalAnswered = Object.keys(answers).length;
+  
+  const fb = document.getElementById('fb-' + qId);
+  fb.textContent = (isCorrect ? '✓ Benar! ' : '✗ Kurang tepat. ') + feedback;
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'ok' : 'bad');
+  
+  if (totalAnswered === 3) {
+    const scoreDisplay = document.getElementById('score-display');
+    scoreDisplay.classList.add('visible');
+    document.getElementById('score-num').textContent = correctCount + '/3';
+    const msgs = ['Jangan menyerah! Coba review materi di tab 4 Pilar dan coba lagi ya 💪', 'Lumayan bagus! Kamu sudah mengerti sebagian besar konsepnya. Terus belajar! 🙌', 'Hampir sempurna! Kamu sudah paham CT dengan sangat baik! 🔥', 'Sempurna! Kamu siap jadi problem-solver kelas dunia! 🏆'];
+    document.getElementById('score-msg').textContent = msgs[correctCount];
+  }
+}
+
+function saveStep(num) {
+  const saved = document.getElementById('step' + num + '-saved');
+  saved.style.display = 'block';
+  setTimeout(() => { saved.style.display = 'none'; }, 2000);
+}
+</script>
+</div>
+</body>
+</html>
